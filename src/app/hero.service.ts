@@ -1,8 +1,6 @@
 import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
 import { Promise } from 'firebase';
 
-import * as Rs from 'rxjs';
-
 import { Hero } from './hero';
 import { Injectable } from '@angular/core';
 
