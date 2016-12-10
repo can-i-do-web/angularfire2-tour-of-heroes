@@ -1,4 +1,8 @@
 <h2>My Heroes</h2>
+<div>
+  <input type="text" [(ngModel)]="newHero">
+  <input type="button" value="add Hero" (click)="clickAddBtn()" [disabled]="!newHero">
+</div>
 <ul class="heroes">
   <li *ngFor="let hero of heroes"
     [class.selected]="hero === selectedHero"
@@ -10,5 +14,8 @@
   <h2>
     {{selectedHero.name | uppercase}} is my hero
   </h2>
-  <button (click)="gotoDetail()">View Details</button>
+  <div>
+    <button (click)="gotoDetail()">View Details</button>
+    <button (click)="clickDeleteBtn()">Remove Hero</button>
+  </div>
 </div>

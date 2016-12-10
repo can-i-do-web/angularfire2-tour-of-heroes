@@ -1,21 +1,38 @@
+import { AngularFire, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2';
+import { Promise } from 'firebase';
+
+import * as Rs from 'rxjs';
+
 import { Hero } from './hero';
-import { HEROES } from './mock-heroes';
 import { Injectable } from '@angular/core';
 
 @Injectable()
 export class HeroService {
-  getHeroes(): Promise<Hero[]> {
-    return Promise.resolve(HEROES);
+  heroes: FirebaseListObservable<Hero[]>;
+
+  constructor(private af: AngularFire){
+    this.heroes = this.af.database.list('/heroes');
   }
 
-  getHeroesSlowly(): Promise<Hero[]> {
-    return new Promise<Hero[]>(resolve =>
-      setTimeout(resolve, 2000)) // delay 2 seconds
-      .then(() => this.getHeroes());
+  getHeroes(): FirebaseListObservable<Hero[]> {
+    return this.heroes;
   }
 
-  getHero(id: number): Promise<Hero> {
-    return this.getHeroes()
-               .then(heroes => heroes.find(hero => hero.id === id));
+  getHero(key: string): FirebaseObjectObservable<Hero> {
+    return this.af.database.object(`/heroes/${key}`);
+  }
+
+  updateHero(hero: Hero): Promise<void> {
+    return this.heroes.update(hero.$key, { name: hero.name });
+  }
+
+  addHero(newHero: string): Promise<void> {
+    return this.heroes.push({
+      id: 100, name: newHero
+    });
+  }
+
+  removeHero(hero: Hero): Promise<void> {
+    return this.heroes.remove(hero.$key);
   }
 }
